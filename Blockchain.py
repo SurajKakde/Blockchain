@@ -55,7 +55,7 @@ def add_transaction(recipient, sender=owner, amount=1.0):
     transaction = {'sender': sender,
                    'recipient': recipient,
                    'amount': amount}
-    if verify_transaction(transaction):
+    if not verify_transaction(transaction):
         open_transactions.append(transaction)
         participants.add(sender)
         participants.add(recipient)
@@ -86,6 +86,10 @@ def get_transaction_value():
     tx_recipient = input('Enter the recipient of the transaction: ')
     tx_amount = float(input('your transaction amount please: '))
     return tx_recipient, tx_amount
+
+
+def validate_transactions():
+    return all([verify_transaction(tx) for tx in open_transactions])
 
 
 def get_user_choice():
@@ -121,6 +125,7 @@ while waiting_for_input:
     print('2: Mine a new block')
     print('3: Display the blockchain blocks')
     print('4: Print the participants')
+    print('5: check transaction validity')
     print('h: Manipulate the transaction')
     print('q: Quit')
     user_choice = get_user_choice()
@@ -140,6 +145,11 @@ while waiting_for_input:
         print_blockchain_elements()
     elif user_choice == '4':
         print(participants)
+    elif user_choice == '5':
+        if validate_transactions():
+            print('All transactions are valid')
+        else:
+            print('There are invalid transactions!')
     elif user_choice == 'h':
         if len(blockchain) >= 1:
             blockchain[0] = {'previous_hash': '',
