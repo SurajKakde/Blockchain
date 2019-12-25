@@ -1,3 +1,4 @@
+import functools
 #reward for the mining new block
 MINING_REWARD = 10
 # Initializing out blockchain list
@@ -15,18 +16,16 @@ def hash_block(block):
 
 
 def get_balance(participant):
+    # Balance amount of the sender in block chain transactions
     tx_sender = [[tx['amount'] for tx in block['transactions'] if tx['sender'] == participant] for block in blockchain]
+    # sum of amount by a sender in open transactions
     open_tx_sender = [tx['amount'] for tx in open_transactions if tx['sender'] == participant]
     tx_sender.append(open_tx_sender)
-    amount_sent = 0
-    for tx in tx_sender:
-        if len(tx) > 0:
-            amount_sent += tx[0]
-    tx_received = [[tx['amount'] for tx in block['transactions'] if tx['recipient'] == participant] for block in blockchain]
-    amount_received = 0
-    for tx in tx_received:
-        if len(tx) > 0:
-            amount_received += tx[0]
+    amount_sent = functools.reduce(lambda tx_sum, tx_amt: tx_sum + tx_amt[0] if len(tx_amt) > 0 else 0, tx_sender, 0)
+    # amount received by the participant in block chain transactions
+    tx_received = [[tx['amount'] for tx in block['transactions']
+                    if tx['recipient'] == participant] for block in blockchain]
+    amount_received = functools.reduce(lambda tx_sum, tx_amt: tx_sum + tx_amt if len(tx_amt) > 0 else 0, tx_received, 0)
     return amount_received - amount_sent
 
 
