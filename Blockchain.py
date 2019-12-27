@@ -6,8 +6,10 @@ import json
 MINING_REWARD = 10
 # Initializing out blockchain list
 genesis_block = {'previous_hash': '',
-             'index': 0,
-             'transactions': []}
+                'index': 0,
+                'transactions': [],
+                 'proof': 100
+                 }
 blockchain = [genesis_block]
 open_transactions = []
 owner = 'Suraj'
@@ -15,7 +17,24 @@ participants = {'Suraj'}
 
 
 def hash_block(block):
+    # return calculated hash value using hashlib library for the block
     return hl.sha256(json.dumps(block).encode()).hexdigest()
+
+
+def valid_proof(transactions, last_hash, proof):
+    guess = (str(transactions) + str(last_hash) + str(proof)).encode()
+    guess_hash = hl.sha256(guess).hexdigest()
+    print(guess_hash)
+    return guess_hash[0:2] == '00'
+
+
+def proof_of_work():
+    last_block = blockchain[-1]
+    last_hash = hash_block(last_block)
+    proof = 0
+    while not valid_proof(open_transactions, last_hash, proof):
+        proof += 1
+    return proof
 
 
 def get_balance(participant):
@@ -69,7 +88,7 @@ def add_transaction(recipient, sender=owner, amount=1.0):
 def mine_block():
     last_block = blockchain[-1]
     hashed_block = hash_block(last_block)
-    print(hashed_block)
+    proof = proof_of_work()
     reward_transaction = {
         'sender': 'MINING',
         'recipient': owner,
@@ -79,7 +98,9 @@ def mine_block():
     copied_transactions.append(reward_transaction)
     block = {'previous_hash': hashed_block,
              'index': len(blockchain),
-             'transactions': copied_transactions}
+             'transactions': copied_transactions,
+             'proof': proof
+             }
     blockchain.append(block)
     return True
 
@@ -117,6 +138,9 @@ def verify_blockchain():
         if index == 0:
             continue
         elif block['previous_hash'] != hash_block(blockchain[index - 1]):
+            return False
+        if not valid_proof(block['transactions'][:-1], block['previous_hash'], block['proof']):
+            print('Proof of work is invalid!')
             return False
     return True
 
