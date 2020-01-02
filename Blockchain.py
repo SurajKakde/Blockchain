@@ -37,6 +37,14 @@ def load_data():
             update_blockchain.append(update_block)
         blockchain = update_blockchain
         open_transactions = json.loads(file_content[1])
+        updated_transactions = []
+        for tx in open_transactions:
+            updated_transaction = OrderedDict([('sender', tx['sender']),
+                                                    ('recipient', tx['recipient']),
+                                                    ('amount', tx['amount'])])
+            updated_transactions.append(updated_transaction)
+        open_transactions = updated_transactions
+
 
 
 load_data()
