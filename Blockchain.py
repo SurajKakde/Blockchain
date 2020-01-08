@@ -5,7 +5,7 @@ import json
 import pickle
 
 from hash_util import hash_string_256, hash_block
-
+from block import Block
 
 # Reward for the mining new block
 MINING_REWARD = 10
