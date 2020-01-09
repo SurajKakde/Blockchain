@@ -27,7 +27,7 @@ def load_data():
             update_blockchain = []
             for block in blockchain:
                 converted_tx = [Transaction(tx['sender'], tx['recipient'], tx['amount']) for tx in block['transactions']]
-                update_block = Block(block.index, block.previous_hash, converted_tx, block.proof, block.timestamp)
+                update_block = Block(block['index'], block['previous_hash'], converted_tx, block['proof'], block['timestamp'])
                 update_blockchain.append(update_block)
             blockchain = update_blockchain
             open_transactions = json.loads(file_content[1])
@@ -51,7 +51,7 @@ load_data()
 def save_data():
     try:
         with open('blockchain.txt', mode='w') as f:
-            saveable_chain = [block.__dict__ for block in blockchain]
+            saveable_chain = [block.__dict__ for block in [Block(block_el.index, block_el.previous_hash, [tx.__dict__ for tx in block_el.transactions],block_el.proof, block_el.timestamp) for block_el in blockchain ]]
             f.write(json.dumps(saveable_chain))
             f.write('\n')
             saveable_tx = [tx.__dict__ for tx in open_transactions]
@@ -138,7 +138,7 @@ def mine_block():
     #     'recipient': owner,
     #     'amount': MINING_REWARD
     # }
-    reward_transaction = Transaction('MINING', recipient, amount)
+    reward_transaction = Transaction('MINING', owner, MINING_REWARD)
     copied_transactions = open_transactions[:]
     copied_transactions.append(reward_transaction)
     block = Block(len(blockchain), hashed_block, copied_transactions, proof)
