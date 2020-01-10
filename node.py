@@ -5,7 +5,7 @@ from verification import Verification
 
 class Node:
     def __init__(self):
-        self.id = uuid4()
+        self.id = str(uuid4())
         self.blockchain = Blockchain(self.id)
 
     def get_transaction_value(self):
@@ -67,7 +67,7 @@ class Node:
                 self.print_blockchain_elements()
                 print('Invalid Blockchain!')
                 break
-            print('Balance of {} : {:6.2f}'.format(self.id , self.blockchain.get_balance(self.id)))
+            print('Balance of {} : {:6.2f}'.format(self.id , self.blockchain.get_balance()))
         else:
             print('User left!')
 

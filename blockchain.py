@@ -19,7 +19,7 @@ class Blockchain:
         # Initializing our (empty) blockchain list
         self.chain = [genesis_block]
         # Unhandled transactions
-        open_transactions = []
+        self.open_transactions = []
         self.load_data()
         self. hosting_node = hosting_node_id
 
