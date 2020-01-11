@@ -23,7 +23,7 @@ class Node:
 
     def print_blockchain_elements(self):
         """Print the block chain elements"""
-        for block in self.blockchain.get_chain():
+        for block in self.blockchain.chain:
             print('outputting block')
             print(block)
         else:
@@ -62,7 +62,7 @@ class Node:
                 waiting_for_input = False
             else:
                 print('Input was invalid. Please pick a value from the list')
-            if not Verification.verify_blockchain(self.blockchain.get_chain()):
+            if not Verification.verify_blockchain(self.blockchain.chain):
                 self.print_blockchain_elements()
                 print('Invalid Blockchain!')
                 break

@@ -17,14 +17,22 @@ class Blockchain:
         # Initializing out blockchain list
         genesis_block = Block(0, '', [], 100, 0)
         # Initializing our (empty) blockchain list
-        self.__chain = [genesis_block]
+        self.chain = [genesis_block]
         # Unhandled transactions
         self.__open_transactions = []
         self.load_data()
         self. hosting_node = hosting_node_id
 
-    def get_chain(self):
+    @property
+    def chain(self):
         return self.__chain[:]
+
+    @chain.setter
+    def chain(self, val):
+        self.__chain = val
+
+    # def get_chain(self):
+    #     return self.__chain[:]
 
     def get_open_transaction(self):
         return self.__open_transactions[:]
@@ -42,7 +50,7 @@ class Blockchain:
                     converted_tx = [Transaction(tx['sender'], tx['recipient'], tx['amount']) for tx in block['transactions']]
                     update_block = Block(block['index'], block['previous_hash'], converted_tx, block['proof'], block['timestamp'])
                     update_blockchain.append(update_block)
-                self.__chain = update_blockchain
+                self.chain = update_blockchain
                 open_transactions = json.loads(file_content[1])
                 updated_transactions = []
                 for tx in open_transactions:
