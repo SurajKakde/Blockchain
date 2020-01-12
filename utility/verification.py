@@ -1,4 +1,6 @@
-from hash_util import hash_string_256, hash_block
+""" Provides helper methods to verify the block chain """
+
+from utility.hash_util import hash_string_256, hash_block
 
 
 class Verification:
