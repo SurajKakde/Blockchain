@@ -37,6 +37,8 @@ class Node:
             print('2: Mine a new block')
             print('3: Display the blockchain blocks')
             print('4: check transaction validity')
+            print('5: create wallet')
+            print('6: load wallet')
             print('q: Quit')
             user_choice = self.get_user_choice()
             if user_choice == '1':
@@ -57,6 +59,10 @@ class Node:
                     print('All transactions are valid')
                 else:
                     print('There are invalid transactions!')
+            elif user_choice == '5':
+                pass
+            elif user_choice == '6':
+                pass
             elif user_choice == 'q':
                 waiting_for_input = False
             else:
