@@ -85,7 +85,6 @@ class Blockchain:
             proof += 1
         return proof
 
-
     def get_balance(self):
         """
         Calculates the balance of the host
@@ -105,7 +104,6 @@ class Blockchain:
         amount_received = reduce(lambda tx_sum, tx_amt: tx_sum + sum(tx_amt) if len(tx_amt) > 0 else tx_sum + 0, tx_received, 0)
         return amount_received - amount_sent
 
-
     def get_last_blockchain_value(self):
         """ Returns last value of blockchain list"""
         if len(self.__chain) < 1:
@@ -122,6 +120,8 @@ class Blockchain:
         :amount: the amount of coins sent with the transaction ( default = 1.0 )
 
         """
+        if self.hosting_node is None:
+            return False
         # transaction = {'sender': sender,
         #                'recipient': recipient,
         #                'amount': amount}
@@ -132,8 +132,9 @@ class Blockchain:
             return True
         return False
 
-
     def mine_block(self, node):
+        if self.hosting_node is None:
+            return False
         last_block = self.__chain[-1]
         hashed_block = hash_block(last_block)
         proof = self.proof_of_work()

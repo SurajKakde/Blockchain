@@ -1,12 +1,13 @@
 from blockchain import Blockchain
 from utility.verification import Verification
+from wallet import Wallet
 
 
 class Node:
     def __init__(self):
         # self.id = str(uuid4())
-        self.id = 'Suraj'
-        self.blockchain = Blockchain(self.id)
+        self.wallet = Wallet()
+        self.blockchain = None
 
     def get_transaction_value(self):
         """ Returns user input as a float value
@@ -45,13 +46,14 @@ class Node:
                 tx_data = self.get_transaction_value()
                 recipient, amount = tx_data
                 # Add the transaction amount to block chain
-                if self.blockchain.add_transaction(recipient, self.id, amount=amount):
+                if self.blockchain.add_transaction(recipient, self.wallet.public_key, amount=amount):
                     print('Added transaction!')
                 else:
                     print('Transaction failed!')
                 print(self.blockchain.get_open_transaction())
             elif user_choice == '2':
-                self.blockchain.mine_block(self.id)
+                if not self.blockchain.mine_block(self.wallet.public_key):
+                    print('Mining failed. got no wallet?')
             elif user_choice == '3':
                 self.print_blockchain_elements()
             elif user_choice == '4':
@@ -60,7 +62,8 @@ class Node:
                 else:
                     print('There are invalid transactions!')
             elif user_choice == '5':
-                pass
+                self.wallet.create_keys()
+                self.blockchain = Blockchain(self.wallet.public_key)
             elif user_choice == '6':
                 pass
             elif user_choice == 'q':
@@ -71,7 +74,7 @@ class Node:
                 self.print_blockchain_elements()
                 print('Invalid Blockchain!')
                 break
-            print('Balance of {} : {:6.2f}'.format(self.id , self.blockchain.get_balance()))
+            print('Balance of {} : {:6.2f}'.format(self.wallet.public_key, self.blockchain.get_balance()))
         else:
             print('User left!')
 
