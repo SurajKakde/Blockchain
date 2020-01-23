@@ -47,7 +47,7 @@ def load_wallet():
         return jsonify(response), 500
 
 
-@app.route('/balance', menthods=['GET'])
+@app.route('/balance', methods=['GET'])
 def get_balance():
     balance = blockchain.get_balance()
     if balance is not None:
