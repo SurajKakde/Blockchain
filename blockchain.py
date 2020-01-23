@@ -92,6 +92,8 @@ class Blockchain:
         :return: host balance is returned
         """
         participant = self.hosting_node
+        if participant is None:
+            return None
         # Balance amount of the sender in block chain transactions
         tx_sender = [[tx.amount for tx in block.transactions if tx.sender == participant] for block in self.__chain]
         # sum of amount by a sender in open transactions
