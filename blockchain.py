@@ -32,9 +32,9 @@ class Blockchain:
         self.chain = [genesis_block]
         # Unhandled transactions
         self.__open_transactions = []
-        self.load_data()
         self.hosting_node = hosting_node_id
         self.__peer_nodes = set()
+        self.load_data()
 
     # This turns the chain attribute into a property with a getter (the method below) and a setter (@chain.setter)
     @property
@@ -225,7 +225,7 @@ class Blockchain:
         self.__peer_nodes.add(node)
         self.save_data()
 
-    def remove_peer_nose(self, node):
+    def remove_peer_node(self, node):
         """
         Removes the node from the peer node set
 
@@ -234,3 +234,9 @@ class Blockchain:
         """
         self.__peer_nodes.discard(node)
         self.save_data()
+
+    def get_peer_nodes(self):
+        """
+        Return a list of all connected peer nodes
+        """
+        return list(self.__peer_nodes)
