@@ -72,7 +72,7 @@ def get_balance():
         return jsonify(response), 500
 
 
-@app.route('/broadcast-transaction')
+@app.route('/broadcast-transaction', methods=['POST'])
 def broadcast_transaction():
     values = request.get_json()
     if not values:
@@ -82,7 +82,7 @@ def broadcast_transaction():
     if not all(key in values for key in required):
         response = {'message': 'Some data is missing.'}
         return jsonify(response), 400
-    success = blockchain.add_transaction(values['recipient'], values['sender'], values['amount'], values['signature'],
+    success = blockchain.add_transaction(values['recipient'], values['sender'], values['signature'], values['amount'],
                                          is_receiving=True)
     if success:
         response = {
@@ -104,7 +104,7 @@ def broadcast_transaction():
 
 @app.route('/transaction', methods=['POST'])
 def add_transaction():
-    if wallet.public_key == None:
+    if wallet.public_key is None:
         response = {
             'message': 'No wallet set up.'
         }
