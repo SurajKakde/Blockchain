@@ -180,8 +180,8 @@ class Blockchain:
         #     'recipient': recipient,
         #     'amount': amount
         # }
-        if self.public_key is None:
-            return False
+        # if self.public_key is None:
+        #     return False
         transaction = Transaction(sender, recipient, signature, amount)
         if Verification.verify_transaction(transaction, self.get_balance):
             self.__open_transactions.append(transaction)
