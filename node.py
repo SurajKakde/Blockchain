@@ -103,7 +103,7 @@ def broadcast_transaction():
 
 
 @app.route('/broadcast-block', methods=['POST'])
-def broadcast_block()
+def broadcast_block():
     values = request.get_json()
     if not values:
         response = {'message': 'No data found.'}
@@ -113,12 +113,18 @@ def broadcast_block()
         return jsonify(response), 400
     block = values['block']
     if block['index'] == blockchain.chain[-1].index + 1:
-        pass
+        if blockchain.add_block(block):
+            response = {'message': 'block added'}
+            return jsonify(response), 201
+        else:
+            response = {'message': 'Block seems invalid'}
+            return jsonify(response), 500
     elif block['index'] > blockchain.chain[-1].index:
         pass
     else:
         response = {'message': 'Blockchain seems to be shorter, block not added'}
         return jsonify(response), 409
+
 
 @app.route('/transaction', methods=['POST'])
 def add_transaction():
