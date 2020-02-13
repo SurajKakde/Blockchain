@@ -58,7 +58,7 @@ def load_keys():
 @app.route('/balance', methods=['GET'])
 def get_balance():
     balance = blockchain.get_balance()
-    if balance != None:
+    if balance is not None:
         response = {
             'message': 'Fetched balance successfully.',
             'funds': balance
@@ -66,8 +66,8 @@ def get_balance():
         return jsonify(response), 200
     else:
         response = {
-            'messsage': 'Loading balance failed.',
-            'wallet_set_up': wallet.public_key != None
+            'message': 'Loading balance failed.',
+            'wallet_set_up': wallet.public_key is not None
         }
         return jsonify(response), 500
 
@@ -123,14 +123,14 @@ def broadcast_block():
         response = {'message': 'Blockchain seems to differ from local blockchain.'}
         blockchain.resolve_conflicts = True
         return jsonify(response), 200
-    else: 
+    else:
         response = {'message': 'Blockchain seems to be shorter, block not added'}
         return jsonify(response), 409
 
 
 @app.route('/transaction', methods=['POST'])
 def add_transaction():
-    if wallet.public_key == None:
+    if wallet.public_key is None:
         response = {
             'message': 'No wallet set up.'
         }
@@ -177,7 +177,7 @@ def mine():
         response = {'message': 'Resolve conflicts first, block not added!'}
         return jsonify(response), 409
     block = blockchain.mine_block()
-    if block != None:
+    if block is not None:
         dict_block = block.__dict__.copy()
         dict_block['transactions'] = [
             tx.__dict__ for tx in dict_block['transactions']]
@@ -190,7 +190,7 @@ def mine():
     else:
         response = {
             'message': 'Adding a block failed.',
-            'wallet_set_up': wallet.public_key != None
+            'wallet_set_up': wallet.public_key is not None
         }
         return jsonify(response), 500
 
@@ -246,7 +246,7 @@ def add_node():
 
 @app.route('/node/<node_url>', methods=['DELETE'])
 def remove_node(node_url):
-    if node_url == '' or node_url == None:
+    if node_url == '' or node_url is None:
         response = {
             'message': 'No node found.'
         }
@@ -270,6 +270,7 @@ def get_nodes():
 
 if __name__ == '__main__':
     from argparse import ArgumentParser
+
     parser = ArgumentParser()
     parser.add_argument('-p', '--port', type=int, default=5000)
     args = parser.parse_args()
